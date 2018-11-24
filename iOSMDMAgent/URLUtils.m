@@ -45,6 +45,15 @@ NSString *const STATUS = @"status";
 NSString *const ENROLLMENT_URL = @"ENROLLMENT_URL";
 NSString *const EFFECTIVE_POLICY_PATH = @"EFFECTIVE_POLICY_PATH";
 NSString *const TOKEN_REFRESH_URI = @"TOKEN_REFRESH_URI";
+NSString *const TENANT_NAME = @"tenantDomain";
+NSString *const USERNAME = @"username";
+NSString *const PASSWORD = @"password";
+NSString *const AGENT_BASED_ENROLLMENT = @"AGENT_BASED_ENROLLMENT";
+NSString *const CA_DOWNLOAD_PATH = @"CA_DOWNLOAD_PATH";
+NSString *const AUTH_PATH = @"AUTH_PATH";
+NSString *const LICENSE_PATH = @"LICENSE_PATH";
+NSString *const ENROLL_PATH = @"ENROLL_PATH";
+NSString *const IS_ENROLLED_PATH = @"IS_ENROLLED_PATH";
 
 
 + (NSDictionary *)readEndpoints {
@@ -67,6 +76,10 @@ NSString *const TOKEN_REFRESH_URI = @"TOKEN_REFRESH_URI";
 
 + (NSString *)getEnrollmentURLFromPlist {
     return [[URLUtils readEndpoints] objectForKey:ENROLLMENT_URL];
+}
+
++ (NSString *)getEnrollmentType {
+    return [[URLUtils readEndpoints] objectForKey:AGENT_BASED_ENROLLMENT];
 }
 
 + (NSString *)getServerURLFromPlist {
@@ -118,12 +131,32 @@ NSString *const TOKEN_REFRESH_URI = @"TOKEN_REFRESH_URI";
     return [NSString stringWithFormat:@"%@:%@%@", [URLUtils getSavedEnrollmentURL], [URLUtils getEnrolmentPort], [[URLUtils readEndpoints] objectForKey:ENROLLMENT_URI]];
 }
 
++ (NSString *)getCaDownloadURL {
+    return [NSString stringWithFormat:@"%@:%@%@", [URLUtils getSavedEnrollmentURL], [URLUtils getEnrolmentPort], [[URLUtils readEndpoints] objectForKey:CA_DOWNLOAD_PATH]];
+}
+
 + (NSString *)getTokenRefreshURL {
     return [NSString stringWithFormat:@"%@:%@%@", [URLUtils getSavedEnrollmentURL], [URLUtils getEnrolmentPort], [[URLUtils readEndpoints] objectForKey:TOKEN_REFRESH_URI]];
 }
 
 + (NSString *)getEffectivePolicyURL {
     return [NSString stringWithFormat:@"%@:%@%@%@", [URLUtils getServerURL], [URLUtils getAPIPort], [URLUtils getContextURL], [[URLUtils readEndpoints] objectForKey:EFFECTIVE_POLICY_PATH]];
+}
+
++ (NSString *)getAuthenticationURL {
+    return [NSString stringWithFormat:@"%@:%@%@", [URLUtils getSavedEnrollmentURL], [URLUtils getEnrolmentPort], [[URLUtils readEndpoints] objectForKey:AUTH_PATH]];
+}
+
++ (NSString *)getLicenseURL {
+    return [NSString stringWithFormat:@"%@:%@%@", [URLUtils getSavedEnrollmentURL], [URLUtils getEnrolmentPort], [[URLUtils readEndpoints] objectForKey:LICENSE_PATH]];
+}
+
++ (NSString *)getEnrollURL:(NSString *)tenantDomain username:(NSString *)token {
+    return [NSString stringWithFormat:@"%@:%@%@%@&token=%@", [URLUtils getSavedEnrollmentURL], [URLUtils getEnrolmentPort], [[URLUtils readEndpoints] objectForKey:ENROLL_PATH], tenantDomain, token];
+}
+
++ (NSString *)getIsEnrolledURL {
+    return [NSString stringWithFormat:@"%@:%@%@%@", [URLUtils getSavedEnrollmentURL], [URLUtils getEnrolmentPort],[URLUtils getContextURL], [[URLUtils readEndpoints] objectForKey:IS_ENROLLED_PATH]];
 }
 
 @end

@@ -23,6 +23,7 @@ extern NSInteger const LOCATION_OFF_CODE;
 
 - (void)showLoginViewController;
 - (void)authorizeLocationService;
+- (void) registerForPushToken;
 
 @end
 

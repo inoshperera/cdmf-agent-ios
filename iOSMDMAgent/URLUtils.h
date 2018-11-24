@@ -42,6 +42,15 @@ extern NSString *const STATUS;
 extern int OAUTH_FAIL_CODE;
 extern NSString *const ENROLLMENT_URL;
 extern NSString *const EFFECTIVE_POLICY_PATH;
+extern NSString *const TENANT_NAME;
+extern NSString *const USERNAME;
+extern NSString *const PASSWORD;
+extern NSString *const AGENT_BASED_ENROLLMENT;
+extern NSString *const CA_DOWNLOAD_PATH;
+extern NSString *const AUTH_PATH;
+extern NSString *const LICENSE_PATH;
+extern NSString *const ENROLL_PATH;
+extern NSString *const IS_ENROLLED_PATH;
 
 + (void)saveServerURL:(NSString *)serverURL;
 + (NSString *)getServerURL;
@@ -59,5 +68,11 @@ extern NSString *const EFFECTIVE_POLICY_PATH;
 + (NSString *)getServerURLFromPlist;
 + (NSString *)getEffectivePolicyURL;
 + (NSString *)getTokenRefreshURL;
++ (NSString *)getEnrollmentType;
++ (NSString *)getCaDownloadURL;
++ (NSString *)getAuthenticationURL;
++ (NSString *)getLicenseURL;
++ (NSString *)getEnrollURL:(NSString *)tenantDomain username:(NSString *)token;
++ (NSString *)getIsEnrolledURL;
 
 @end

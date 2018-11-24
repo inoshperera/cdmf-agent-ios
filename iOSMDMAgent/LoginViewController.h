@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *txtServer;
 
 - (IBAction)clickOnRegister:(id)sender;
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender;
 - (void)enroll;
 
 @end

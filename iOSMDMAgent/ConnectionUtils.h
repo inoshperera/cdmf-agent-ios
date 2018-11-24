@@ -15,5 +15,8 @@
 - (void)sendUnenrollToServer;
 - (void)sendOperationUpdateToServer:(NSString *)deviceId operationId:(NSString *)opId status:(NSString *)state;
 - (void)enforceEffectivePolicy:(NSString *)deviceId;
+- (void)authenticate:(NSString *)tenantDomain username:(NSString *)username password:(NSString *)password completion:(void (^)(BOOL success))completionBlock;
+- (void)getLicense:(void (^)(BOOL success))completionBlock;
+- (void)isEnrolled:(void (^)(BOOL success))completionBlock;
 
 @end

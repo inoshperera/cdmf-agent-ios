@@ -28,5 +28,17 @@
 	<string>/devices/effective-policy/%@</string>
 	<key>TOKEN_REFRESH_URI</key>
 	<string>/ios-web-agent/enrollments/ios/login-agent?isRefresh=true</string>
+	<key>AGENT_BASED_ENROLLMENT</key>
+	<string>AGENT</string>
+	<key>CA_DOWNLOAD_PATH</key>
+	<string>/ios-web-agent/enrollment/ios/download-certificate</string>
+	<key>AUTH_PATH</key>
+	<string>/ios-enrollment/agent-authenticate</string>
+	<key>LICENSE_PATH</key>
+	<string>/ios-enrollment/license</string>
+	<key>ENROLL_PATH</key>
+	<string>/ios-web-agent/enrollment/ios/enroll?agent-enroll-request=true&amp;tenant=</string>
+	<key>IS_ENROLLED_PATH</key>
+	<string>/devices/udid</string>
 </dict>
 </plist>

@@ -7,6 +7,7 @@
 #import "URLUtils.h"
 #import "MDMUtils.h"
 #import "AppDelegate.h"
+#import "AuthenticateViewController.h"
 
 //Remove this code chunk in production
 @interface NSURLRequest(Private)
@@ -16,6 +17,148 @@
 @end
 
 @implementation ConnectionUtils
+
+- (void)isEnrolled:(void (^)(BOOL success))completionBlock {
+    NSString *endpoint = [URLUtils getIsEnrolledURL];
+    NSURL *url = [NSURL URLWithString:endpoint];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:HTTP_REQUEST_TIME];
+    NSLog(@"isEnrolled:url: %@", url);
+    
+    [request setHTTPMethod:POST];
+    [self addAccessToken:request];
+    [self setAllowsAnyHTTPSCertificate:url];
+    
+    NSMutableDictionary *paramDictionary = [[NSMutableDictionary alloc] init];
+    [paramDictionary setObject:[NSString stringWithFormat:@"%@", [MDMUtils getPreferance:CHALLANGE_TOKEN]] forKey:@"challengeToken"];
+    [request setHTTPBody:[[self dictionaryToJSON:paramDictionary] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        long code = [(NSHTTPURLResponse *)response statusCode];
+        if (code == HTTP_OK) {
+            NSLog(@"isEnrolled successful");
+            NSError * error = nil;
+            NSData * data = [NSURLConnection sendSynchronousRequest:request
+                                                  returningResponse:&response
+                                                              error:&error];
+            if (error == nil) {
+                NSError *jsonError;
+                NSString *returnedData = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+                NSData *objectData = [returnedData dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
+                                                                     options:NSJSONReadingMutableContainers
+                                                                       error:&jsonError];
+                NSString *udid =(NSString*)[json objectForKey:@"id"];
+                [MDMUtils saveDeviceUDID:udid];
+                [MDMUtils setEnrollStatus:ENROLLED];
+                if (completionBlock != nil) {
+                    completionBlock(YES);
+                }
+            }
+            
+        } else {
+            NSLog(@"isEnrolled unsuccessful");
+            if (completionBlock != nil) {
+                completionBlock(NO);
+            }
+        }
+    }];
+}
+
+- (void)getLicense:(void (^)(BOOL success))completionBlock {
+    NSString *endpoint = [URLUtils getLicenseURL];
+    NSURL *url = [NSURL URLWithString:endpoint];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:HTTP_REQUEST_TIME];
+    NSLog(@"getLicense:url: %@", url);
+    
+    [request setHTTPMethod:GET];
+    [self addAccessToken:request];
+    [self setAllowsAnyHTTPSCertificate:url];
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        long code = [(NSHTTPURLResponse *)response statusCode];
+        if (code == HTTP_OK) {
+            NSLog(@"getLicense successful");
+            NSError * error = nil;
+            NSData * data = [NSURLConnection sendSynchronousRequest:request
+                                                  returningResponse:&response
+                                                              error:&error];
+            if (error == nil) {
+                NSError *jsonError;
+                NSString *returnedData = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+                NSData *objectData = [returnedData dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
+                                                                     options:NSJSONReadingMutableContainers
+                                                                       error:&jsonError];
+                NSString *text =(NSString*)[json objectForKey:@"text"];
+                [MDMUtils savePreferance:LICENSE_TEXT value:text];
+                if (completionBlock != nil) {
+                    completionBlock(YES);
+                }
+            }
+            
+        } else {
+            NSLog(@"getLicense unsuccessful");
+            if (completionBlock != nil) {
+                completionBlock(NO);
+            }
+        }
+    }];
+}
+
+- (void)authenticate:(NSString *)tenantDomain username:(NSString *)username password:(NSString *)password completion:(void (^)(BOOL success))completionBlock{
+    NSString *endpoint = [URLUtils getAuthenticationURL];
+    NSURL *url = [NSURL URLWithString:endpoint];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:HTTP_REQUEST_TIME];
+    NSLog(@"authenticating:url: %@", url);
+    
+    NSMutableDictionary *paramDictionary = [[NSMutableDictionary alloc] init];
+    [paramDictionary setObject:[NSString stringWithFormat:@"%@", tenantDomain] forKey:TENANT_NAME];
+    [paramDictionary setObject:[NSString stringWithFormat:@"%@", username] forKey:USERNAME];
+    [paramDictionary setObject:[NSString stringWithFormat:@"%@", password] forKey:PASSWORD];
+    
+    [request setHTTPMethod:POST];
+    [request setHTTPBody:[[self dictionaryToJSON:paramDictionary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [self setContentType:request];
+    [self setAllowsAnyHTTPSCertificate:url];
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        long code = [(NSHTTPURLResponse *)response statusCode];
+        
+        if (code == HTTP_OK) {
+            NSLog(@"Authetication successful");
+            NSError * error = nil;
+            NSData * data = [NSURLConnection sendSynchronousRequest:request
+                                                  returningResponse:&response
+                                                              error:&error];
+            if (error == nil) {
+                NSError *jsonError;
+                NSString *returnedData = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+                NSData *objectData = [returnedData dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
+                                                                     options:NSJSONReadingMutableContainers
+                                                                       error:&jsonError];
+                NSString *accessToken =(NSString*)[json objectForKey:@"accessToken"];
+                NSString *refreshToken =(NSString*)[json objectForKey:@"refreshToken"];
+                NSString *base64EncodedClientCredentials =(NSString*)[json objectForKey:@"client"];
+                NSString *challengeToken =(NSString*)[json objectForKey:@"challengeToken"];
+                
+                [MDMUtils savePreferance:ACCESS_TOKEN value:accessToken];
+                [MDMUtils savePreferance:REFRESH_TOKEN value:refreshToken];
+                [MDMUtils savePreferance:CLIENT_CREDENTIALS value:base64EncodedClientCredentials];
+                [MDMUtils savePreferance:CHALLANGE_TOKEN value:challengeToken];
+                if (completionBlock != nil) {
+                    completionBlock(YES);
+                }
+            }
+
+        } else {
+            if (completionBlock != nil) {
+                completionBlock(NO);
+            }
+            NSLog(@"Authetication unsuccessful");
+        }
+    }];
+}
 
 - (void)sendPushTokenToServer:(NSString *)udid pushToken:(NSString *)token {
     

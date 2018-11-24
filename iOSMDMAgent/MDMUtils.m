@@ -36,6 +36,8 @@ NSString *const REFRESH_TOKEN = @"REFRESH_TOKEN";
 NSString *const CLIENT_CREDENTIALS = @"CLIENT_CREDENTIALS";
 NSString *const TENANT_DOMAIN = @"TENANT_DOMAIN";
 NSString *const LOCATION_UPDATED_TIME = @"LOCATION_UPDATED_TIME";
+NSString *const LICENSE_TEXT = @"LICENSE_TEXT";
+NSString *const CHALLANGE_TOKEN = @"CHALLANGE_TOKEN";
 
 + (void)saveDeviceUDID:(NSString *)udid {
     NSLog(@"Saving device UUID: %@", udid);

@@ -25,6 +25,8 @@ extern NSString *const LOCATION_OPERATION_ID;
 extern NSString *const ACCESS_TOKEN;
 extern NSString *const REFRESH_TOKEN;
 extern NSString *const CLIENT_CREDENTIALS;
+extern NSString *const CHALLANGE_TOKEN;
+extern NSString *const LICENSE_TEXT;
 
 extern NSString *const TENANT_DOMAIN;
 extern NSString *const LOCATION_UPDATED_TIME;

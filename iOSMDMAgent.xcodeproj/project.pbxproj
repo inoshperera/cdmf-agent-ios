@@ -25,6 +25,10 @@
 		14BD723C1A83479900D43DE5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14BD723A1A83479900D43DE5 /* LaunchScreen.xib */; };
 		14BD72481A83479900D43DE5 /* iOSMDMAgentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BD72471A83479900D43DE5 /* iOSMDMAgentTests.m */; };
 		14BD72541A834E2200D43DE5 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BD72531A834E2200D43DE5 /* LoginViewController.m */; };
+		593FB7A4218C729E0032488F /* CAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 593FB7A3218C729E0032488F /* CAViewController.m */; };
+		593FB7A7218C84930032488F /* AuthenticateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 593FB7A6218C84930032488F /* AuthenticateViewController.m */; };
+		593FB7AA218D83180032488F /* LicenseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 593FB7A9218D83180032488F /* LicenseViewController.m */; };
+		595A0B59219157A9006C1C91 /* InstallProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 595A0B58219157A8006C1C91 /* InstallProfileViewController.m */; };
 		E80C7E3C2040137100215441 /* ManagedAppConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = E80C7E3B2040137100215441 /* ManagedAppConfig.plist */; };
 /* End PBXBuildFile section */
 
@@ -70,7 +74,15 @@
 		14BD72521A834E2200D43DE5 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		14BD72531A834E2200D43DE5 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		40735CED1D9BC4CA00AAB802 /* iOSMDMAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOSMDMAgent.entitlements; sourceTree = "<group>"; };
-		E80C7E3B2040137100215441 /* ManagedAppConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = ManagedAppConfig.plist; path = ManagedAppConfig.plist; sourceTree = "<group>"; };
+		593FB7A2218C729E0032488F /* CAViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAViewController.h; sourceTree = "<group>"; };
+		593FB7A3218C729E0032488F /* CAViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CAViewController.m; sourceTree = "<group>"; };
+		593FB7A5218C84930032488F /* AuthenticateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthenticateViewController.h; sourceTree = "<group>"; };
+		593FB7A6218C84930032488F /* AuthenticateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthenticateViewController.m; sourceTree = "<group>"; };
+		593FB7A8218D83180032488F /* LicenseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LicenseViewController.h; sourceTree = "<group>"; };
+		593FB7A9218D83180032488F /* LicenseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LicenseViewController.m; sourceTree = "<group>"; };
+		595A0B57219157A8006C1C91 /* InstallProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InstallProfileViewController.h; sourceTree = "<group>"; };
+		595A0B58219157A8006C1C91 /* InstallProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InstallProfileViewController.m; sourceTree = "<group>"; };
+		E80C7E3B2040137100215441 /* ManagedAppConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ManagedAppConfig.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +165,14 @@
 				14BD72331A83479900D43DE5 /* ViewController.m */,
 				14BD72521A834E2200D43DE5 /* LoginViewController.h */,
 				14BD72531A834E2200D43DE5 /* LoginViewController.m */,
+				593FB7A2218C729E0032488F /* CAViewController.h */,
+				593FB7A3218C729E0032488F /* CAViewController.m */,
+				593FB7A5218C84930032488F /* AuthenticateViewController.h */,
+				593FB7A6218C84930032488F /* AuthenticateViewController.m */,
+				593FB7A8218D83180032488F /* LicenseViewController.h */,
+				593FB7A9218D83180032488F /* LicenseViewController.m */,
+				595A0B57219157A8006C1C91 /* InstallProfileViewController.h */,
+				595A0B58219157A8006C1C91 /* InstallProfileViewController.m */,
 				14AE5F641AC039FC005144D3 /* Libraries */,
 				14BD72511A83488D00D43DE5 /* Views */,
 				14BD722B1A83479800D43DE5 /* Supporting Files */,
@@ -255,7 +275,7 @@
 					14BD72271A83479800D43DE5 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = KED4SHKL8S;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -327,9 +347,13 @@
 				14AE5F5C1AC034B0005144D3 /* ConnectionUtils.m in Sources */,
 				14BD72541A834E2200D43DE5 /* LoginViewController.m in Sources */,
 				142143961A9600BD006C34B6 /* MDMUtils.m in Sources */,
+				593FB7A7218C84930032488F /* AuthenticateViewController.m in Sources */,
 				14BD72341A83479900D43DE5 /* ViewController.m in Sources */,
 				14BD72311A83479900D43DE5 /* AppDelegate.m in Sources */,
+				595A0B59219157A9006C1C91 /* InstallProfileViewController.m in Sources */,
 				14BD722E1A83479900D43DE5 /* main.m in Sources */,
+				593FB7A4218C729E0032488F /* CAViewController.m in Sources */,
+				593FB7AA218D83180032488F /* LicenseViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,16 +488,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = iOSMDMAgent/iOSMDMAgent.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: WSO2 Inc";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = KED4SHKL8S;
 				INFOPLIST_FILE = iOSMDMAgent/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.wso2.carbon.emm.ios.agent;
+				PRODUCT_BUNDLE_IDENTIFIER = org.wso2.carbon.emm.mdmagent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "1363c945-6d46-48dd-bda5-8d9061abe18c";
+				PROVISIONING_PROFILE_SPECIFIER = EMMTestInosh;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -484,16 +508,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = iOSMDMAgent/iOSMDMAgent.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: WSO2 Inc";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = KED4SHKL8S;
 				INFOPLIST_FILE = iOSMDMAgent/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.wso2.carbon.emm.ios.agent;
+				PRODUCT_BUNDLE_IDENTIFIER = org.wso2.carbon.emm.mdmagent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "1363c945-6d46-48dd-bda5-8d9061abe18c";
+				PROVISIONING_PROFILE_SPECIFIER = EMMTestInosh;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

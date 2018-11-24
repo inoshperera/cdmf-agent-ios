@@ -7,6 +7,7 @@
 //
 
 #import "LoginViewController.h"
+#import "CAViewController.h"
 #import "URLUtils.h"
 
 @interface LoginViewController ()
@@ -17,6 +18,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.txtServer.delegate = self;
+    //[self.txtServer setText:@"https://192.168.1.107"];
+    [self.txtServer setText:@"https://192.168.8.120"];
     // Do any additional setup after loading the view.
     NSString *enrollURL = [URLUtils getEnrollmentURLFromPlist];
     NSString *serverURL = [URLUtils getServerURLFromPlist];
@@ -30,6 +33,17 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
+                                                  forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.view.backgroundColor = [UIColor clearColor];
+    self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
+}
+
 /*
 #pragma mark - Navigation
 
@@ -41,7 +55,7 @@
 */
 
 - (IBAction)clickOnRegister:(id)sender {
-    [self enroll];
+    //[self enroll];
 }
 
 
@@ -57,6 +71,10 @@
 }
 
 - (void)enroll {
+    
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     NSURL *serverURL = [NSURL URLWithString:self.txtServer.text];
     
     if (!self.txtServer || [@"" isEqualToString:self.txtServer.text]) {
@@ -71,7 +89,7 @@
          Therefore, both Enrollment URL(manager node URL where the enrollment app is stored) and the gateway url are
          taken as the same. Check didChangeAuthorizationStatus method in AppDeligate.m for production behaviour,
          Where the URLs are hard coded.
-        */
+         */
         NSString *enrollURL = [URLUtils getEnrollmentURLFromPlist];
         NSString *serverURL = [URLUtils getServerURLFromPlist];
         if(enrollURL && ![@"" isEqualToString:enrollURL] && serverURL && ![@"" isEqualToString:serverURL]) {
@@ -81,8 +99,15 @@
             [URLUtils saveServerURL:self.txtServer.text];
             [URLUtils saveEnrollmentURL:self.txtServer.text];
         }
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[URLUtils getEnrollmentURL]]];
+        NSString *type = [URLUtils getEnrollmentType];
+        if(type != nil && [@"AGENT" isEqualToString:type]) {
+            return YES;
+        } else {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[URLUtils getEnrollmentURL]]];
+        }
+        
     }
+    return NO;
 }
 
 @end

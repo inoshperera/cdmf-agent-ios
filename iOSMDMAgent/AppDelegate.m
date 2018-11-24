@@ -83,7 +83,7 @@ NSInteger const LOCATION_OFF_CODE = 1000;
         NSLog(@"DEP config initiated.");
         [self registerForPushToken];
         [MDMUtils setEnrollStatus:ENROLLED];
-        [self showLoginViewController];
+        //[self showLoginViewController];
     }
  
     return YES;
@@ -108,6 +108,7 @@ NSInteger const LOCATION_OFF_CODE = 1000;
     if ([[MDMUtils getEnrollStatus] isEqualToString:ENROLLED]) {
         [self showUnregisterViewController];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"appDidBecomeActive" object:nil];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -226,9 +227,14 @@ NSInteger const LOCATION_OFF_CODE = 1000;
 - (void)showLoginViewController {    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     UIViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"loginViewController"];
+    UINavigationController *passcodeNavigationController = [[UINavigationController alloc] initWithRootViewController:@"loginViewController"];
     UIViewController *top = [UIApplication sharedApplication].keyWindow.rootViewController;
     loginViewController.modalPresentationStyle = UIModalPresentationFullScreen;
     [top presentViewController:loginViewController animated:NO completion:nil];
+    
+    
+    // [self.navigationController presentModalViewController:passcodeNavigationController animated:YES];
+    [loginViewController.navigationController pushViewController:passcodeNavigationController animated:YES];
 }
 
 - (void)showUnregisterViewController {
