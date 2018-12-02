@@ -16,6 +16,6 @@
 @property (weak, nonatomic) IBOutlet UITextView *textProfile;
 @property (retain, nonatomic) ConnectionUtils *connectionUtils;
 
-- (void)checkEnrollment;
+- (void)enrollmentComplete:(NSNotification *)note;
 
 @end

@@ -27,9 +27,12 @@ extern NSString *const REFRESH_TOKEN;
 extern NSString *const CLIENT_CREDENTIALS;
 extern NSString *const CHALLANGE_TOKEN;
 extern NSString *const LICENSE_TEXT;
-
 extern NSString *const TENANT_DOMAIN;
 extern NSString *const LOCATION_UPDATED_TIME;
+extern NSString *const AUTHENTICATION_FAIL;
+extern NSString *const EMPTY_USERNAME;
+extern NSString *const EMPTY_PASSWORD;
+extern NSString *const ENROLLMENT_SUCCESS;
 
 
 + (void)saveDeviceUDID:(NSString *)udid;

@@ -4,6 +4,7 @@
 
 
 #import "URLUtils.h"
+#import <UIKit/UIKit.h>
 
 @implementation URLUtils
 
@@ -54,6 +55,10 @@ NSString *const AUTH_PATH = @"AUTH_PATH";
 NSString *const LICENSE_PATH = @"LICENSE_PATH";
 NSString *const ENROLL_PATH = @"ENROLL_PATH";
 NSString *const IS_ENROLLED_PATH = @"IS_ENROLLED_PATH";
+NSString *const MOBICONFIG_PATH = @"MOBICONFIG_PATH";
+NSString *const AUTO_ENROLLMENT = @"AUTO_ENROLLMENT";
+NSString *const AUTO_ENROLLMENT_STATUS_PATH = @"AUTO_ENROLLMENT_STATUS_PATH";
+NSString *const AUTO_ENROLLMENT_COMPLETED = @"AUTO_ENROLLMENT_COMPLETED";
 
 
 + (NSDictionary *)readEndpoints {
@@ -152,7 +157,11 @@ NSString *const IS_ENROLLED_PATH = @"IS_ENROLLED_PATH";
 }
 
 + (NSString *)getEnrollURL:(NSString *)tenantDomain username:(NSString *)token {
-    return [NSString stringWithFormat:@"%@:%@%@%@&token=%@", [URLUtils getSavedEnrollmentURL], [URLUtils getEnrolmentPort], [[URLUtils readEndpoints] objectForKey:ENROLL_PATH], tenantDomain, token];
+    NSArray *osVersion = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
+    if ([[osVersion objectAtIndex:0] intValue] >= 10) {
+        return [NSString stringWithFormat:@"%@:%@%@?tenantdomain=%@&token=%@&higer=true", [URLUtils getSavedEnrollmentURL], [URLUtils getEnrolmentPort], [[URLUtils readEndpoints] objectForKey:MOBICONFIG_PATH], tenantDomain, token];
+    }
+    return [NSString stringWithFormat:@"%@:%@%@?tenantdomain=%@&token=%@", [URLUtils getSavedEnrollmentURL], [URLUtils getEnrolmentPort], [[URLUtils readEndpoints] objectForKey:MOBICONFIG_PATH], tenantDomain, token];
 }
 
 + (NSString *)getIsEnrolledURL {

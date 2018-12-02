@@ -55,11 +55,11 @@
     loadingIV.animationImages = animationArray;
     loadingIV.animationDuration = 0.5;
     [loadingIV startAnimating];
-    if (username.text != nil || username.text.length > 0 || ![username.text isEqual:@""]) {
-        if (password.text != nil || password.text.length > 0 || ![password.text isEqual:@""]) {
+    if (username.text != nil && username.text.length > 0 && ![username.text isEqual:@""]) {
+        if (password.text != nil && password.text.length > 0 && ![password.text isEqual:@""]) {
             NSString *tenant = tenantDomain.text;
             _connectionUtils = [[ConnectionUtils alloc] init];
-            if (tenantDomain.text != nil || tenantDomain.text.length > 0 || ![tenantDomain.text isEqual:@""]) {
+            if (tenantDomain.text == nil || tenantDomain.text.length > 0 || [tenantDomain.text isEqual:@""]) {
                 tenant = @"carbon.super";
             }
             

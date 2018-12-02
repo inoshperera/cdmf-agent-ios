@@ -7,7 +7,6 @@
 //
 
 #import "LoginViewController.h"
-#import "CAViewController.h"
 #import "URLUtils.h"
 
 @interface LoginViewController ()
@@ -18,8 +17,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.txtServer.delegate = self;
-    //[self.txtServer setText:@"https://192.168.1.107"];
-    [self.txtServer setText:@"https://192.168.8.120"];
     // Do any additional setup after loading the view.
     NSString *enrollURL = [URLUtils getEnrollmentURLFromPlist];
     NSString *serverURL = [URLUtils getServerURLFromPlist];
@@ -43,16 +40,6 @@
     self.navigationController.view.backgroundColor = [UIColor clearColor];
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (IBAction)clickOnRegister:(id)sender {
     //[self enroll];

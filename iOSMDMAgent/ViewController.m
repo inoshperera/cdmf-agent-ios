@@ -21,6 +21,15 @@
     [super viewDidLoad];
     self.lbLocationSync.text = [MDMUtils getLocationUpdatedTime];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    NSString *autoEnrollmentCompleted = [MDMUtils getPreferance:AUTO_ENROLLMENT_COMPLETED];
+    NSString *autoEnrollment = [MDMUtils getPreferance:AUTO_ENROLLMENT];
+    if (autoEnrollment != nil && autoEnrollment.length > 0 && [autoEnrollment isEqual:@"YES"] && autoEnrollmentCompleted == nil) {
+        [MDMUtils savePreferance:AUTO_ENROLLMENT_COMPLETED value:@"YES"];
+        NSString *url = [[URLUtils readEndpoints] objectForKey:AUTO_ENROLLMENT_STATUS_PATH];
+        NSString *statusURL =[NSString stringWithFormat:@"%@?status=%@", url, ENROLLMENT_SUCCESS];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:statusURL]];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

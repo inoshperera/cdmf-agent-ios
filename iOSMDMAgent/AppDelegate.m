@@ -108,7 +108,7 @@ NSInteger const LOCATION_OFF_CODE = 1000;
     if ([[MDMUtils getEnrollStatus] isEqualToString:ENROLLED]) {
         [self showUnregisterViewController];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"appDidBecomeActive" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"enrollmentComplete" object:nil];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -182,6 +182,10 @@ NSInteger const LOCATION_OFF_CODE = 1000;
     NSString *clientCredentials;
     NSString *tenantDomain;
     NSString *isRefreshComplete;
+    Boolean isAgentBasedFlow = NO;
+    Boolean isAutoEnroll = NO;
+    NSString *username;
+    NSString *password;
 
     NSArray *queryParams = [[url query] componentsSeparatedByString:@"&"];
     for (int i=0; i< [queryParams count]; i++){
@@ -203,25 +207,52 @@ NSInteger const LOCATION_OFF_CODE = 1000;
         else if ([key isEqualToString:@"isRefreshComplete"]) {
             isRefreshComplete = value;
         }
+        else if ([key isEqualToString:@"agentBasedFlow"]) {
+            isAgentBasedFlow = YES;
+        }
+        else if ([key isEqualToString:@"isAutoEnroll"]) {
+            isAutoEnroll = YES;
+        }
+        else if ([key isEqualToString:@"username"]) {
+            username = value;
+        }
+        else if ([key isEqualToString:@"password"]) {
+            password = value;
+        }
     }
     
+    if (isAutoEnroll) {
+        [MDMUtils savePreferance:USERNAME value:username];
+        [MDMUtils savePreferance:PASSWORD value:password];
+        [MDMUtils savePreferance:TENANT_NAME value:tenantDomain];
+        [MDMUtils savePreferance:AUTO_ENROLLMENT value:@"YES"];
+        [self startAutoEnrollment];
+    } else if (!isAgentBasedFlow) {
+        [MDMUtils savePreferance:ACCESS_TOKEN value:accessToken];
+        [MDMUtils savePreferance:REFRESH_TOKEN value:refreshToken];
+        [MDMUtils savePreferance:CLIENT_CREDENTIALS value:clientCredentials];
 
-    [MDMUtils savePreferance:ACCESS_TOKEN value:accessToken];
-    [MDMUtils savePreferance:REFRESH_TOKEN value:refreshToken];
-    [MDMUtils savePreferance:CLIENT_CREDENTIALS value:clientCredentials];
-
-    if (!isRefreshComplete) {
-        NSLog(@"New enrollment");
-        NSString *udid = [[url host] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        [MDMUtils saveDeviceUDID:udid];
-        [self registerForPushToken];
-        [MDMUtils setEnrollStatus:ENROLLED];
-        NSLog(@"handleOpenURL:Enforcing effective policy");
-        ConnectionUtils *connectionUtils = [[ConnectionUtils alloc] init];
-        connectionUtils.delegate = self;
-        [connectionUtils enforceEffectivePolicy:[MDMUtils getDeviceUDID]];
+        if (!isRefreshComplete) {
+            NSLog(@"New enrollment");
+            NSString *udid = [[url host] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            [MDMUtils saveDeviceUDID:udid];
+            [self registerForPushToken];
+            [MDMUtils setEnrollStatus:ENROLLED];
+            NSLog(@"handleOpenURL:Enforcing effective policy");
+            ConnectionUtils *connectionUtils = [[ConnectionUtils alloc] init];
+            connectionUtils.delegate = self;
+            [connectionUtils enforceEffectivePolicy:[MDMUtils getDeviceUDID]];
+        }
     }
     return YES;
+}
+
+- (void)startAutoEnrollment {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *autoEnrollVC = [storyboard instantiateViewControllerWithIdentifier:@"autoEnrollVC"];
+    UIViewController *top = [UIApplication sharedApplication].keyWindow.rootViewController;
+    autoEnrollVC.modalPresentationStyle = UIModalPresentationFullScreen;
+    [top presentViewController:autoEnrollVC animated:NO completion:nil];
 }
 
 - (void)showLoginViewController {    
@@ -258,15 +289,6 @@ NSInteger const LOCATION_OFF_CODE = 1000;
     } else {
         // iOS < 8 Notifications
         [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
-    }
-}
-
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    NSLog(@"didChangeAuthorizationStatus");
-    if ([CLLocationManager locationServicesEnabled]) {
-        if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-            [self authorizeLocationService];
-        }
     }
 }
 
@@ -363,6 +385,20 @@ NSInteger const LOCATION_OFF_CODE = 1000;
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self.theAudio play];
 
+}
+
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    NSLog(@"didChangeAuthorizationStatus");
+    if ([CLLocationManager locationServicesEnabled]) {
+        NSString *autoEnrollment = [MDMUtils getPreferance:AUTO_ENROLLMENT];
+        if (autoEnrollment != nil && autoEnrollment.length > 0 && [autoEnrollment isEqual:@"YES"]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"startAutoEnrollment" object:nil];
+        }
+        if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [self authorizeLocationService];
+        }
+    }
 }
 
 - (void)authorizeLocationService {

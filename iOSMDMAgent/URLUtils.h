@@ -51,6 +51,10 @@ extern NSString *const AUTH_PATH;
 extern NSString *const LICENSE_PATH;
 extern NSString *const ENROLL_PATH;
 extern NSString *const IS_ENROLLED_PATH;
+extern NSString *const MOBICONFIG_PATH;
+extern NSString *const AUTO_ENROLLMENT;
+extern NSString *const AUTO_ENROLLMENT_STATUS_PATH;
+extern NSString *const AUTO_ENROLLMENT_COMPLETED;
 
 + (void)saveServerURL:(NSString *)serverURL;
 + (NSString *)getServerURL;

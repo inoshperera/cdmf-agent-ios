@@ -31,6 +31,7 @@
     NSMutableDictionary *paramDictionary = [[NSMutableDictionary alloc] init];
     [paramDictionary setObject:[NSString stringWithFormat:@"%@", [MDMUtils getPreferance:CHALLANGE_TOKEN]] forKey:@"challengeToken"];
     [request setHTTPBody:[[self dictionaryToJSON:paramDictionary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [self setContentType:request];
     
     [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
         long code = [(NSHTTPURLResponse *)response statusCode];
@@ -47,11 +48,16 @@
                 NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
                                                                      options:NSJSONReadingMutableContainers
                                                                        error:&jsonError];
-                NSString *udid =(NSString*)[json objectForKey:@"id"];
-                [MDMUtils saveDeviceUDID:udid];
-                [MDMUtils setEnrollStatus:ENROLLED];
-                if (completionBlock != nil) {
-                    completionBlock(YES);
+
+                NSString *udid =(NSString*)[json objectForKey:@"deviceID"];
+                NSLog(@"udid %@", udid);
+                if (udid.length) {
+                    [MDMUtils saveDeviceUDID:udid];
+                    if (completionBlock != nil) {
+                        completionBlock(YES);
+                    }
+                } else {
+                    completionBlock(NO);
                 }
             }
             
@@ -303,6 +309,7 @@
     NSURL *url = [NSURL URLWithString:[URLUtils getUnenrollURL]];
 
     NSString *deviceId = [MDMUtils getDeviceUDID];
+    NSLog(@"device id, %@", deviceId);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:HTTP_REQUEST_TIME];
     NSArray *deviceList = @[deviceId];
     
@@ -325,6 +332,13 @@
                 [self sendUnenrollToServer];
             }
             [MDMUtils setEnrollStatus:UNENROLLED];
+            [MDMUtils savePreferance:USERNAME value:nil];
+            [MDMUtils savePreferance:TENANT_DOMAIN value:nil];
+            [MDMUtils savePreferance:ACCESS_TOKEN value:nil];
+            [MDMUtils savePreferance:REFRESH_TOKEN value:nil];
+            [MDMUtils savePreferance:CLIENT_CREDENTIALS value:nil];
+            [MDMUtils savePreferance:CHALLANGE_TOKEN value:nil];
+            [MDMUtils savePreferance:AUTO_ENROLLMENT_COMPLETED value:nil];
     
         } else if (code == HTTP_CREATED) {
             

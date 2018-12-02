@@ -47,7 +47,9 @@
 */
 
 - (IBAction)acceptLicense:(id)sender {
-    
+    NSString *url = [URLUtils getEnrollURL:[MDMUtils getPreferance:TENANT_DOMAIN] username:[MDMUtils getPreferance:CHALLANGE_TOKEN]];
+    NSLog(@"acceptLicense url %@", url);
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
 - (IBAction)cancelLicense:(id)sender {
     [MDMUtils savePreferance:USERNAME value:nil];

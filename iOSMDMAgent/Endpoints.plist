@@ -21,9 +21,9 @@
 	<key>ENROLMENT_PORT</key>
 	<string>9443</string>
 	<key>ENROLLMENT_URL</key>
-	<string></string>
+	<string>https://192.168.8.120</string>
 	<key>SERVER_URL</key>
-	<string>https://gateway.api.cloudstaging.wso2.com</string>
+	<string>https://192.168.8.120</string>
 	<key>EFFECTIVE_POLICY_PATH</key>
 	<string>/devices/effective-policy/%@</string>
 	<key>TOKEN_REFRESH_URI</key>
@@ -40,5 +40,9 @@
 	<string>/ios-web-agent/enrollment/ios/enroll?agent-enroll-request=true&amp;tenant=</string>
 	<key>IS_ENROLLED_PATH</key>
 	<string>/devices/udid</string>
+	<key>MOBICONFIG_PATH</key>
+	<string>/ios-web-agent/mobiconfig</string>
+	<key>AUTO_ENROLLMENT_STATUS_PATH</key>
+	<string>yourapps://urlhandlergoes here</string>
 </dict>
 </plist>
